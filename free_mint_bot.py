@@ -173,22 +173,22 @@ def tweet_image(url, message):
 
             message = message + '\n\nImage:' + url
             re = api.update_status(message)
-        print("sleep 300s")
-        time.sleep(300)
+        print("sleep 1800s")
+        time.sleep(1800)
 
         print("转推结果：" + re.id_str)
         os.remove(filename)
     else:
         print("Unable to download image")
 
-    time.sleep(1)
+    time.sleep(300)
     return True
 
 
 def get_transaction_by_block(block):
     # block = 14554209
     print("block:{}".format(block))
-    time.sleep(2)
+    time.sleep(300)
     json = get_moralis_by_block(block)
     # print("json:{}".format(json))
     if json:
@@ -204,7 +204,7 @@ def get_transaction_by_block(block):
     results = json['result']
 
     for result in results:
-        # time.sleep(2)
+        # time.sleep(300)
         transaction_hash = result['transaction_hash']
         block_timestamp = result['block_timestamp']
         token_id = result['token_id']
@@ -272,7 +272,7 @@ def get_transaction_by_block(block):
         session.commit()
         if session.query(Contract).filter(Contract.token_address == transaction_token_address).count() == 0:
             try:
-                time.sleep(1)
+                time.sleep(300)
                 asset_json = get_asset_from_opensea(transaction_token_address, tran_token_id)
 
                 # image_url = asset_json['image_url']
@@ -321,8 +321,8 @@ def get_transaction_by_block(block):
             except Exception as e:
                 traceback.print_exc()
                 session.rollback()
-                print("sleep 3s")
-                time.sleep(3)
+                print("sleep 1800s")
+                time.sleep(1800)
                 continue
 
     return True
@@ -372,7 +372,7 @@ def send_tweet_use_nftport(nftport_json, result):
 
 def get_moralis_by_block(block):
     # block = 14554209
-    time.sleep(1)
+    time.sleep(300)
 
     try:
         req_session = requests.Session()
@@ -452,7 +452,7 @@ def start(from_block, to_block):
         print("from_block={}".format(from_block))
         print("to_block={}".format(to_block))
         if from_block >= to_block:
-            time.sleep(30)
+            time.sleep(300)
             latest_block = get_latest_block()
             start(from_block, latest_block)
 
@@ -461,7 +461,7 @@ def start(from_block, to_block):
         print("block={}".format(block))
         # block = 14580279
         if get_transaction_by_block(block) == False:
-            time.sleep(1)
+            time.sleep(300)
             get_transaction_by_block(block)
         else:
             _block = session.query(BlockInfo).update({BlockInfo.block: block})
